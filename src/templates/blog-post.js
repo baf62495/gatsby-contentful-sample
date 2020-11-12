@@ -14,9 +14,21 @@ class BlogPostTemplate extends React.Component {
       this.props,
       'data.site.siteMetadata.title'
     );
+    const modules = get(this.props, 'data.contentfulBlogPost.modules');
+
+    modules.forEach(obj => {
+      Object.keys(obj).forEach(key => {
+        if (key == 'copy') {
+          console.log(`key: ${key}  /  value: ${obj[key]}`)
+        } else {
+          console.log('false')
+        }
+      })
+    })
 
     return (
       <Layout location={this.props.location}>
+      {console.log(modules)}
         <div style={{ background: '#fff' }}>
           <Helmet title={`${post.title} | ${siteTitle}`} />
           <div className={heroStyles.hero}>
@@ -37,11 +49,6 @@ class BlogPostTemplate extends React.Component {
             >
               {post.publishDate}
             </p>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: post.body.childMarkdownRemark.html,
-              }}
-            />
           </div>
         </div>
       </Layout>
@@ -61,9 +68,9 @@ export const pageQuery = graphql`
           ...GatsbyContentfulFluid
         }
       }
-      body {
-        childMarkdownRemark {
-          html
+      modules {
+        copy {
+          copy
         }
       }
     }
